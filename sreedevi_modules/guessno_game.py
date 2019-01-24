@@ -1,4 +1,4 @@
-# This is a guess the number game.
+# This is a guess the number game which uses random module
 
 import random
 i = 1

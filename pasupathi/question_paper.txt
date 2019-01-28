@@ -1,0 +1,14 @@
+What is national flower?
+Jasmine,Rose,Lotus,Tulip
+
+What is national Tree?
+Almond,Banayan,Mango,Neem
+
+What is national river?
+Ganga,Yamuna,Krishna,Kaveri
+
+What is national Animal?
+Lion,Tiger,Elephant,Cow
+
+What is national Fruit?
+Grapes,Mango,Apple,Orange

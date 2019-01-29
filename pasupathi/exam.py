@@ -19,7 +19,6 @@ for i, j in qp_dict.items():
     print(i)
     for m, n in j.items():
         print(m, '.', n)
-
     while True:
         ans = input('Enter option: ')
         if ans not in 'aAbBcCdD':

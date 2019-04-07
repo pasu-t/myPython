@@ -1,0 +1,10 @@
+-->Package is nothing but a folder
+-->Package is collection of modules
+-->Every package must contain "__init__.py" file
+different implementations:
+
+import abc
+from abc import m1
+import abc.m2 or from abc imprt m2
+from abc.m2 import f5,f6
+

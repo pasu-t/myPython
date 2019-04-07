@@ -1,0 +1,18 @@
+-->Two key features: Encapsulation and inheritance
+
+--> Variable holds data
+--> Object holds data and functions(code)
+
+--> Every object is called as real entity which has properties and values
+
+Encapsulation: Wrapping up of both properties and methods in a single logical unti is known as encapsulation.
+
+Class:
+->Collection of properties and methods into single logical unit
+->The instance of the class is known as object
+->By default all properties and methods are public
+->'.' operator is used to access both properties and methods
+->Private properties and methods starts with "__" , cannot be accessed through an object
+->Private properties and methods can be accessed through its public method
+->Self is a special argument,it holds current object address
+

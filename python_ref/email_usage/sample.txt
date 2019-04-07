@@ -1,0 +1,20 @@
+C:\Users\Home>ping 192.168.0.103 -n 10
+
+Pinging 192.168.0.103 with 32 bytes of data:
+Request timed out.
+Request timed out.
+Reply from 192.168.0.101: Destination host unreachable.
+Reply from 192.168.0.101: Destination host unreachable.
+Reply from 192.168.0.101: Destination host unreachable.
+Reply from 192.168.0.103: bytes=32 time=2089ms TTL=64
+Reply from 192.168.0.103: bytes=32 time=4ms TTL=64
+Reply from 192.168.0.103: bytes=32 time=2ms TTL=64
+Reply from 192.168.0.103: bytes=32 time=11ms TTL=64
+Reply from 192.168.0.103: bytes=32 time=121ms TTL=64
+
+Ping statistics for 192.168.0.103:
+    Packets: Sent = 10, Received = 8, Lost = 2 (20% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 2ms, Maximum = 2089ms, Average = 445ms
+
+C:\Users\Home>

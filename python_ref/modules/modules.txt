@@ -1,0 +1,17 @@
+-->It is a collection of classes, properties(variables) and methods(functions)
+-->Every python program itself acts as a module
+-->The name of the program is the module name
+-->'import' is a keyword used to import module
+-->'.' is used to access module properties and methods through module name
+-->The main concept of a module is reusability
+-->The python looks for module in the following locations
+ 1. current direcotry
+ 2. python home directory
+ 3. import sys
+    sys.path #list of environment path variables
+** dir() is the function that displays give module properties and methods
+
+--> Moduke builtin properties
+ 1. __name__
+ 2. __doc__
+ 3. __file__

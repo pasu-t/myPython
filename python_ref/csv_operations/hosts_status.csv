@@ -1,0 +1,5 @@
+ip_address,host_name,ping_health,remote_conn_check
+192.168.0.100,myPC,100, 
+192.168.0.101,myMobile,100, 
+192.168.0.102,myGuest,0, 
+192.168.0.103,Other,0, 

@@ -1,0 +1,4 @@
+-->The objects which allows to modify the contents of those objects are known as mutable
+*we can create two different mutable objects with same content.
+-->list, set and dict class objects are mutable objects
+-->mutable objects performance is low when compared to immutable objects

@@ -1,0 +1,10 @@
+--> The objects which doesn't allow to modify the contents of those objects are known as immutable
+--> Before creating immutable objects with some content, python interpreter verifies if there is any object is available in memory location with same content or not.
+
+    If object is not available then python interpreter creates new object and store the object address into reference variable
+    If object is already present in memory location with same content, then python interpreter will not create new object and already existing object address will be given to the reference variable
+
+ -->So memory space can be saved in immutable objects. thereby performance is high.
+ -->Applying iterations on immutable objects takes less time
+ -->All fundamental types represented class objects and tuple class objects are immutable objects
+ **int, float, complex, boolean, string and tuple are immutable object 

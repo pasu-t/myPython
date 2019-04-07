@@ -3,3 +3,4 @@ ip_address,host_name,os,conn_protocol,user,password
 192.168.0.101,myMobile,android,,,
 192.168.0.102,myGuest,android,,,
 192.168.0.103,Other,android,,,
+192.168.0.104,Other,android,,,

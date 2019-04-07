@@ -46,6 +46,11 @@ def ping_ip(ip_addr):
 # for i in ip_list:
 # 	ping_ip(i)
 def start_ping():
+	'''
+	function starts the simultaneous ping to the ip address in the list by creating thread objects.
+	The it wait till all the threads to complete their tasks.
+	It will igonre the dummy threads which may exists.
+	'''
 	for i in ip_list:
 		threading.Thread(target=ping_ip, args=(i,)).start()
 	for thread in threading.enumerate():
@@ -60,6 +65,9 @@ def start_ping():
 				raise
 
 def check_ping_health():
+	'''
+	this function gives the percentage of successful pings
+	'''
 	for each in ping_status:
 		for value in each.values():
 			ping_health.append(int((value[0]/4)*100))

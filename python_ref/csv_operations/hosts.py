@@ -8,7 +8,7 @@ import smtplib
 from email.message import EmailMessage
 
 #Gobal variables
-list_contacts = ['pasupathi.thumburu@gmail.com', 'malleswari.ysn@gmail.com']
+list_contacts = ['pasupathi.thumburu@gmail.com', 'pasupathi.thumbur@adtran.com']
 list_files = ['hosts_status.csv']
 ip_list = []
 hosts_name = []
@@ -94,7 +94,7 @@ def send_email(list_files,list_contacts):
 	email_password = os.environ.get('EMAIL_PSWD')
 	msg = EmailMessage()
 	msg.set_content('Files attached...')
-	msg['Subject'] = 'Hey buddy check my files'
+	msg['Subject'] = 'Current host status'
 	msg['From'] = email_address
 	msg['To'] = list_contacts
 	files = list_files

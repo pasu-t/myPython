@@ -91,7 +91,7 @@ def send_email(list_files,list_contacts):
 	''' 
 	#contacts = ['pasupathi.thumburu@gmail.com']
 	email_address= 'pasupathi.thumburu@gmail.com'
-	email_password = os.environ.get('EMAIL_PSWD')
+	email_password = os.environ.get('EMAIL_PASSWORD')
 	msg = EmailMessage()
 	msg.set_content('Files attached...')
 	msg['Subject'] = 'Current host status'
@@ -105,7 +105,10 @@ def send_email(list_files,list_contacts):
 			msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
 
 	with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-		smtp.login(email_address,email_password)
+		try:
+			smtp.login(email_address,email_password)
+		except:
+			print('Please check the email credentials. Seems got error while login or sendind an email')
 		smtp.send_message(msg)
 
 start_ping()

@@ -23,7 +23,7 @@ with open('hosts.csv', 'r') as hosts_file:
 	for line in hosts_reader:
 		ip_list.append(line['ip_address'])
 		hosts_name.append(line['host_name'])
-	remote_conn_check = [' ' for _ in range(len(ip_list))]
+	remote_conn_check = [' ' for _ in range(len(ip_list))] #temporarilty storing empty values,once remote check function is ready, we can remove this line
 	
 def ping_ip(ip_addr):
 	'''
@@ -48,7 +48,7 @@ def ping_ip(ip_addr):
 def start_ping():
 	'''
 	function starts the simultaneous ping to the ip address in the list by creating thread objects.
-	The it wait till all the threads to complete their tasks.
+	Then it wait till all the threads to complete their tasks.
 	It will igonre the dummy threads which may exists.
 	'''
 	for i in ip_list:

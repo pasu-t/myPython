@@ -6,4 +6,5 @@ ip_address,host_name,os,conn_protocol,user,password
 10.49.61.127,414RG,linux,ssh,admin,adtran9638000
 10.49.61.128,434RG,linux,ssh,admin,adtran9638000
 10.49.61.139,434RG,linux,ssh,admin,adtran9638000
-
+10.49.8.18,ontwin,windows,rdp,,
+172.,pasupathi,windows,rdp,,

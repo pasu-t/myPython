@@ -15,7 +15,7 @@ def ssh_connect(host, username, password):
 	    linux_remote_check.append({host : 'Fail'})
 	    #exit(1)
 	except Exception as e:
-	    print(e.message)
+	    print(e)
 	    linux_remote_check.append({host : 'Fail'})   
 	    #exit(2)
 
@@ -23,15 +23,17 @@ def ssh_cmd_exec():
 	try:
 	    stdin, stdout, stderr = ssh.exec_command(cmd)
 	except Exception as e:
-	    print(e.message)
+	    print(e)
 
 	err = ''.join(stderr.readlines())
 	out = ''.join(stdout.readlines())
 	final_output = str(out)+str(err)
 	print(final_output)
 
-ssh_connect("10.49.20.152", "root","adtran1234" )
-ssh_connect("10.49.61.125", "admin1","adtran9638000")
+#ssh_connect("10.49.20.152", "root","adtran1234" )
+#ssh_connect("10.49.61.125", "admin1","adtran9638000")
+#ssh_connect("10.49.61.125", "admin1","adtran9638000")
+ssh_connect("10.49.8.64","adtran","adtran123")
 print(linux_remote_check) #wrong credentials
 
 

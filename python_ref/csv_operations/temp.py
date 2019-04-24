@@ -1,96 +1,137 @@
-import random
-import sys
+import csv
+import threading
+import subprocess
 import os
-import jira.client
-import json
-import logging
-import datetime
-import base64
-import requests
-import urllib
-import smtplib
 import re
-from smtplib import SMTPException
-# from win32com.client import Dispatch
-# import win32com.client as win32
-from jira.client import JIRA
+import time
+import smtplib
+from email.message import EmailMessage
 
-"""
-"project":{"key": "CN"},
-"issuetype": {"name": "Bug"}},
-"summary": "PI9 task for team Sherlock ",
-"Component/s":"ONT - XGS-PON",
-"Unit Part Number":"1287823F1",
-"Version Found":"ML-720",
-"description": "Creating of an task item to track",
-"Priority":"Minor"
-"Source":"System Test"
-"Reproducibility":"Create On Demand"
-===============
-"project":{"key": "AD"},
-"summary": "PI9-4 test jira for team Sherlock",
-"description": str(failure_testcase_list),
-"issuetype": {"name": "Story"}}
-"""
+#Gobal variables
+list_contacts = ['pasupathi.thumburu@gmail.com', 'pasupathi.thumbur@adtran.com']
+list_files = ['hosts_status.csv']
+ip_list = []
+hosts_name = []
+ping_status = []
+ping_health = []
+#remote_conn_check = []
 
-#################Get the list of testcases failed to log.txt with team names and build ID#########
-#http://172.22.49.180/api/build/56310/results
+#path = 'C:\\Users\\Home\\Desktop\\pasi\\python_ref\\csv_operations\\hosts.csv'
 
-username = 'vboyi'
-password = 'Password@1234'
-#url=raw_input("Enter the skydocker URL")
-url = 'http://172.22.49.180/api/build/56310/results'
+with open('hosts.csv', 'r') as hosts_file:
+	hosts_reader = csv.DictReader(hosts_file)
+	for line in hosts_reader:
+		ip_list.append(line['ip_address'])
+		hosts_name.append(line['host_name'])
+	remote_conn_check = [' ' for _ in range(len(ip_list))] #temporarilty storing empty values,once remote check function is ready, we can remove this line
+	
+def ping_ip(ip_addr):
+	'''
+	Functions takes ip address as a input and try to ping that ip annd appends the results to ping_status
+	'''
+	ping = subprocess.Popen('ping '+ip_addr+' -n 4', stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
+	[out, error] = ping.communicate()
+	output = out.decode()
+	if not error:
+		ping_stats = re.search(r'.*Sent = (\d+),.*(\d+),.*(\d+)%' , output)
+		c_reply = output.lower().count('ttl')
+		c_timeout = output.lower().count('timed out')
+		c_dest = output.lower().count('destination')
+		c_loss = int(ping_stats.group(3))
+		ping_status.append({ip_addr:[c_reply,c_timeout,c_dest]})
+		# print(c_reply, c_timeout, c_dest)
+	else:
+		print('please check the given input')
+		exit()
+# for i in ip_list:
+# 	ping_ip(i)
+def start_ping():
+	'''
+	function starts the simultaneous ping to the ip address in the list by creating thread objects.
+	Then it wait till all the threads to complete their tasks.
+	It will igonre the dummy threads which may exists.
+	'''
+	for i in ip_list:
+		threading.Thread(target=ping_ip, args=(i,)).start()
+	for thread in threading.enumerate():
+		if thread.daemon:
+			continue
+		try:
+			thread.join()
+		except RuntimeError as err:
+			if 'cannot join current thread' in err.args[0]:
+				continue
+			else:
+				raise
 
-def get_failed_tests(url):
-	req = requests.get(url)
-	with open("raw_data.txt","w") as file:
-		file.write(req.text)
-	with open("failed_testcases.txt","w") as file:
-		with open("raw_data.txt","r") as file2:
-			for line in file2.read().split('}'):
-				if "fail" in line:
-					p=re.search(r'"name":"[\s\S]+?"', line).group()
-					q=re.search(r'"build_name":"[\s\S]+?"', line).group()
-					r=re.search(r'"team_name":"[\s\S]+?"|"team_name":null', line).group()
-					#print (p,q,r)
-					file.write("{"),file.write(p),file.write(","),file.write(r),file.write(","),file.write(q),file.write("}"),file.write("\n")
+def check_ping_health():
+	'''
+	this function gives the percentage of successful pings
+	'''
+	for each in ping_status:
+		for value in each.values():
+			ping_health.append(int((value[0]/4)*100))
+
+def windows_remote_check(ip_addr):
+	'''
+	this function verifies whether remote connection is enabled for the given ip address of windows machine
+	'''
+	rdp_cmd = """If (New-Object System.Net.Sockets.TCPClient -ArgumentList """ + ip_addr + """,3389) { Write-Host 'RDP is open' }
+	If ($? -eq $false) { Write-Host 'Something went wrong' }"""
+	rdp_out = subprocess.Popen('powershell '+ rdp_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	[out, error] = rdp_out.communicate()
+	rdp_status = out.decode()
+	if 'RDP is open' in rdp_status:
+		remote_conn_check.append('Success')
+		#print(rdp_status)
+	else:
+		print('A remote connection attempt failed to ',ip_addr)
+		#print(error.decode())
+		remote_conn_check.append('Fail')
 
 
-###Get the list of testcase failures from log.txt#########
-def display_failed_tests():
-	p=open("failed_testcases.txt","r")
-	lines = p.read()
-	failure_testcase_list=re.findall(r'"name":"[\s\S]+?","team_name":[\s\S]+?"|null' ,lines)
-	Build_ID=re.search(r'ML-[0-9]+', lines).group()
+def create_csv():
+	'''
+	this function creates a csv file with ip_list, hostname , ping health and remote connectivity when called
+	'''
+	print('started creating csv file for host status !!!')
+	with open('hosts_status.csv', 'w') as new_file:
+		fieldnames = ['ip_address', 'host_name', 'ping_health', 'remote_conn_check']
+		output_lines = tuple(map(lambda a,b,c,d: [a,b,c,d],ip_list, hosts_name, ping_health, remote_conn_check))
+		csv_writer = csv.writer(new_file)
+		csv_writer.writerow(fieldnames)
+		for line in output_lines:
+			csv_writer.writerow(line)
+			# print(line)
+def send_email(list_files,list_contacts):
+	'''
+	This method will send the mail to list_contacts with attachments of list_files
+	''' 
+	#contacts = ['pasupathi.thumburu@gmail.com']
+	email_address= 'pasupathi.thumburu@gmail.com'
+	email_password = os.environ.get('EMAIL_PASSWORD')
+	msg = EmailMessage()
+	msg.set_content('Files attached...')
+	msg['Subject'] = 'Current host status'
+	msg['From'] = email_address
+	msg['To'] = list_contacts
+	files = list_files
+	for file in files:
+		with open(file, 'rb') as f:
+			file_data = f.read()
+			file_name = f.name
+			msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
 
-	print ("Failed testcases are " + str(failure_testcase_list))
-	print ("Build_ID = " +Build_ID)
-	return [failure_testcase_list,Build_ID]
+	with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+		try:
+			smtp.login(email_address,email_password)
+		except:
+			print('Please check the email credentials. Seems got error while login or sendind an email')
+		smtp.send_message(msg)
 
-###############Log bug in jira.adtran.com with all the failure testcases list##########
-def create_jira(fail_tests_build):
-	jira_options={"server":"http://jira.adtran.com/","verify":False}
-	jira=JIRA(options=jira_options,basic_auth=("vboyi","Password@1234"))
-	issue_dict = {
-	"project":{"key": "AD"},
-	"summary": "Solution fast run testcases in CI failed",
-	"description": "Build ID = " +str(fail_tests_build[1]) +"\n"+str(fail_tests_build[0]),
-	"issuetype": {"name": "Story"}}
-	new_issue=jira.create_issue(fields=issue_dict,prefetch=True)
-	print ("The rest API ID created is " +new_issue.id)
-	return(new_issue.id)
-
-def get_jira_id(new_issue_id):
-	url = 'http://jira.adtran.com/rest/api/2/issue/'+ new_issue_id + '/'
-	r = requests.get(url, auth=(username, password))  
-	page = r.content
-	JiraID = json.loads(page)
-	print ("The jira ID created is " +JiraID['key'])
-
-get_failed_tests(url)
-failed_list_build = display_failed_tests()
-new_issue_id = create_jira(failed_list_build)
-get_jira_id(new_issue_id)
-
+start_ping()
+check_ping_health()
+create_csv()
+send_email(list_files,list_contacts)
 
 

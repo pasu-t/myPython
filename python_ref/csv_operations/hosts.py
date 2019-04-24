@@ -15,7 +15,6 @@ hosts_name = []
 ping_status = []
 ping_health = []
 #remote_conn_check = []
-
 #path = 'C:\\Users\\Home\\Desktop\\pasi\\python_ref\\csv_operations\\hosts.csv'
 
 with open('hosts.csv', 'r') as hosts_file:

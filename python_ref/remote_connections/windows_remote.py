@@ -15,7 +15,7 @@ ip_list = ['10.49.8.18','172.20.12.93', '10.49.8.19','10.49.8.20','172.20.12.93'
 # [out, error] = rdp_out.communicate()
 # rdp_status = out.decode()
 # print(rdp_status)
-windows_remote_check = []
+windows_remote_status = []
 def windows_remote_check(ip_addr):
 	'''
 	this function verifies whether remote connection is enabled for the given ip address of windows machine
@@ -26,12 +26,12 @@ def windows_remote_check(ip_addr):
 	[out, error] = rdp_out.communicate()
 	rdp_status = out.decode()
 	if 'RDP is open' in rdp_status:
-		windows_remote_check.append({ip_addr : 'Success'})
-		print(rdp_status)
+		windows_remote_status.append({ip_addr : 'Success'})
+		#print(rdp_status)
 	else:
 		print('A remote connection attempt failed to ',ip_addr)
 		#print(error.decode())
-		windows_remote_check.append({ip_addr :'Fail'})
+		windows_remote_status.append({ip_addr :'Fail'})
 # for each in ip_list:
 # 	windows_remote_check(each)
 
@@ -54,4 +54,4 @@ def start_remote_check():
 			else:
 				raise
 start_remote_check()
-print(windows_remote_check)
+print(windows_remote_status)

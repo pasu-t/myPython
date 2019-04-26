@@ -1,2 +1,10 @@
-ip_address,host_name,ping_health,remote_conn_check
-10.49.61.125,424RG,100,{'1': 'Fail'}
+ip_address,host_name,ping_health,remote_conn_status
+10.49.20.156,kali,100,Success
+10.49.20.152,'localhost.localdomain',100,Success
+10.49.61.125,424RG,100,Fail
+10.49.61.126,424XRG,100,Fail
+10.49.61.127,414RG,100,Fail
+10.49.61.128,434RG,100,Fail
+10.49.61.139,434RG,0,Fail
+10.49.8.18,ontwin,100,Success
+172.20.13.12,pasupathi,100,Success

@@ -10,11 +10,14 @@ from email.message import EmailMessage
 #Gobal variables
 list_contacts = ['pasupathi.thumburu@gmail.com', 'pasupathi.thumbur@adtran.com']
 list_files = ['hosts_status.csv']
+
 ip_list = []
 hosts_name = []
 ping_status = []
 ping_health = []
-#remote_conn_check = []
+ip_list_windows = []
+ip_list_linux = []
+remote_conn_check = []
 #path = 'C:\\Users\\Home\\Desktop\\pasi\\python_ref\\csv_operations\\hosts.csv'
 
 with open('hosts.csv', 'r') as hosts_file:
@@ -22,6 +25,10 @@ with open('hosts.csv', 'r') as hosts_file:
 	for line in hosts_reader:
 		ip_list.append(line['ip_address'])
 		hosts_name.append(line['host_name'])
+		if line['os'] == 'windows':
+			ip_list_windows.append(line['ip_address'])
+		else:
+			ip_list_linux.append(line['ip_address'])
 	remote_conn_check = [' ' for _ in range(len(ip_list))] #temporarilty storing empty values,once remote check function is ready, we can remove this line
 	
 def ping_ip(ip_addr):

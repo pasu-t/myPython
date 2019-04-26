@@ -10,7 +10,7 @@ import smtplib
 from email.message import EmailMessage
 
 #Gobal variables
-list_contacts = ['pasupathi.thumburu@gmail.com', 'pasupathi.thumbur@adtran.com',]
+list_contacts = ['pasupathi.thumburu@gmail.com', 'pasupathi.thumbur@adtran.com']
 list_files = ['hosts_status.csv']
 ip_list = []
 hosts_name = []

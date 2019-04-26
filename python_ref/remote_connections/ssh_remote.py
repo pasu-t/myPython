@@ -11,13 +11,16 @@ def ssh_connect(host, username, password):
 	    print("Connected to", host)
 	    linux_remote_check.append({host : 'Success'})
 	except paramiko.AuthenticationException:
-	    print("Failed to connect to" , host , "due to wrong username/password")
-	    linux_remote_check.append({host : 'Fail'})
-	    #exit(1)
+		print("Failed to connect to" , host , "due to wrong username/password")
+		linux_remote_check.append({host : 'Fail'})
+		#exit()
 	except Exception as e:
 	    print(e)
 	    linux_remote_check.append({host : 'Fail'})   
-	    #exit(2)
+	    #exit()
+	finally:
+		if ssh:
+			ssh.close()
 
 def ssh_cmd_exec():
 	try:
@@ -30,10 +33,9 @@ def ssh_cmd_exec():
 	final_output = str(out)+str(err)
 	print(final_output)
 
-#ssh_connect("10.49.20.152", "root","adtran1234" )
-#ssh_connect("10.49.61.125", "admin1","adtran9638000")
-#ssh_connect("10.49.61.125", "admin1","adtran9638000")
-ssh_connect("10.49.8.64","adtran","adtran123")
-print(linux_remote_check) #wrong credentials
+ssh_connect("10.49.20.152", "root","adtran1234" )
+ssh_connect("10.49.61.128", "admin","adtran9638000")
+# ssh_connect("10.49.239.162", "admin","adtran9638000")
+print(linux_remote_check)
 
 

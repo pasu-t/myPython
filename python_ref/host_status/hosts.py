@@ -4,6 +4,8 @@ import subprocess
 import os
 import re
 import time
+import paramiko
+import warnings
 import smtplib
 from email.message import EmailMessage
 
@@ -17,7 +19,7 @@ ping_status = []
 ping_health = []
 ip_list_windows = []
 ip_list_linux = []
-remote_conn_check = []
+remote_conn_status = []
 #path = 'C:\\Users\\Home\\Desktop\\pasi\\python_ref\\csv_operations\\hosts.csv'
 
 with open('hosts.csv', 'r') as hosts_file:
@@ -29,7 +31,7 @@ with open('hosts.csv', 'r') as hosts_file:
 			ip_list_windows.append(line['ip_address'])
 		else:
 			ip_list_linux.append(line['ip_address'])
-	remote_conn_check = [' ' for _ in range(len(ip_list))] #temporarilty storing empty values,once remote check function is ready, we can remove this line
+	# remote_conn_check = [' ' for _ in range(len(ip_list))] #temporarilty storing empty values,once remote check function is ready, we can remove this line
 	
 def ping_ip(ip_addr):
 	'''
@@ -78,6 +80,83 @@ def check_ping_health():
 		for value in each.values():
 			ping_health.append(int((value[0]/4)*100))
 
+def windows_remote_check(ip_addr):
+	'''
+	this function verifies whether remote connection is enabled for the given ip address of windows machine
+	'''
+	rdp_cmd = """If (New-Object System.Net.Sockets.TCPClient -ArgumentList """ + ip_addr + """,3389) { Write-Host 'RDP is open' }
+	If ($? -eq $false) { Write-Host 'Something went wrong' }"""
+	rdp_out = subprocess.Popen('powershell '+ rdp_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	[out, error] = rdp_out.communicate()
+	rdp_status = out.decode()
+	if 'RDP is open' in rdp_status:
+		remote_conn_status.append({ip_addr : 'Success'})
+		#print(rdp_status)
+	else:
+		print('A remote connection attempt failed to ',ip_addr)
+		#print(error.decode())
+		remote_conn_status.append({ip_addr :'Fail'})
+def start_windows_remote_check():
+	'''
+	function starts the simultaneous rdp check to the ip address in the list by creating thread objects.
+	Then it wait till all the threads to complete their tasks.
+	It will igonre the dummy threads which may exists.
+	'''
+	for i in ip_list_windows:
+		threading.Thread(target=windows_remote_check, args=(i,)).start()
+	for thread in threading.enumerate():
+		if thread.daemon:
+			continue
+		try:
+			thread.join()
+		except RuntimeError as err:
+			if 'cannot join current thread' in err.args[0]:
+				continue
+			else:
+				raise
+def ssh_connect(ssh_conn_list):
+	'''
+	ssh_conn_list is the list object contains ip,user,password elements [ipaddresss, user, password]
+	Tries ssh remote connection and appends the status to linux_remote_check list variable
+	'''
+	try:
+	    ssh = paramiko.SSHClient()
+	    warnings.filterwarnings(action='ignore',module='.*paramiko.*') # To eliminate display of warning statements w.r.t cryptography version used by paramiko module
+	    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+	    paramiko.util.log_to_file("Exception.log")
+	    ssh.connect(ssh_conn_list[0],username=ssh_conn_list[1],password=ssh_conn_list[2])
+	    print("Connected to", ssh_conn_list[0])
+	    remote_conn_status.append({ssh_conn_list[0] : 'Success'})
+	except paramiko.AuthenticationException:
+	    print("Failed to connect to" , ssh_conn_list[0] , "due to wrong username/password")
+	    remote_conn_status.append({ssh_conn_list[0] : 'Fail'})
+	except Exception as e:
+	    #print(e)
+	    remote_conn_status.append({ssh_conn_list[0] : 'Fail'}) 
+	finally:
+		if ssh: 
+			ssh.close()
+
+def start_linux_remote_check():
+	'''
+	function starts the simultaneous ssh to the ip address in the list by creating thread objects.
+	Then it wait till all the threads to complete their tasks.
+	It will igonre the dummy threads which may exists.
+	'''
+	for i in ip_list_linux:
+		threading.Thread(target=ssh_connect, args=(i,)).start()
+	for thread in threading.enumerate():
+		if thread.daemon:
+			continue
+		try:
+			thread.join()
+		except RuntimeError as err:
+			if 'cannot join current thread' in err.args[0]:
+				continue
+			else:
+				raise
+
+
 def create_csv():
 	'''
 	this function creates a csv file with ip_list, hostname , ping health and remote connectivity when called
@@ -119,6 +198,8 @@ def send_email(list_files,list_contacts):
 
 start_ping()
 check_ping_health()
+start_windows_remote_check()
+start_linux_remote_check()
 create_csv()
 send_email(list_files,list_contacts)
 

@@ -3,6 +3,7 @@ import threading
 import subprocess
 import paramiko
 import warnings
+import logging
 
 ip_list = []
 ip_list_windows = []
@@ -68,16 +69,19 @@ def ssh_connect(ssh_conn_list):
 	    ssh = paramiko.SSHClient()
 	    warnings.filterwarnings(action='ignore',module='.*paramiko.*') # To eliminate display of warning statements w.r.t cryptography version used by paramiko module
 	    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+	    paramiko.util.log_to_file("Exception.log")
 	    ssh.connect(ssh_conn_list[0],username=ssh_conn_list[1],password=ssh_conn_list[2])
 	    print("Connected to", ssh_conn_list[0])
 	    remote_conn_status.append({ssh_conn_list[0] : 'Success'})
 	except paramiko.AuthenticationException:
 	    print("Failed to connect to" , ssh_conn_list[0] , "due to wrong username/password")
 	    remote_conn_status.append({ssh_conn_list[0] : 'Fail'})
-	    #exit(1)
 	except Exception as e:
 	    #print(e)
 	    remote_conn_status.append({ssh_conn_list[0] : 'Fail'}) 
+	finally:
+		if ssh: 
+			ssh.close()
 
 def start_linux_remote_check():
 	'''

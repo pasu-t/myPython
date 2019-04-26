@@ -1,0 +1,21 @@
+DEB [20190426-14:44:03.257] thr=1   paramiko.transport: starting thread (client mode): 0x31226f0
+DEB [20190426-14:44:03.257] thr=1   paramiko.transport: Local version/idstring: SSH-2.0-paramiko_2.4.2
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport: Exception: Error reading SSH protocol banner
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport: Traceback (most recent call last):
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport:   File "C:\Users\adtran\AppData\Local\Programs\Python\Python37-32\lib\site-packages\paramiko\transport.py", line 2138, in _check_banner
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport:     buf = self.packetizer.readline(timeout)
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport:   File "C:\Users\adtran\AppData\Local\Programs\Python\Python37-32\lib\site-packages\paramiko\packet.py", line 367, in readline
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport:     buf += self._read_timeout(timeout)
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport:   File "C:\Users\adtran\AppData\Local\Programs\Python\Python37-32\lib\site-packages\paramiko\packet.py", line 576, in _read_timeout
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport:     raise socket.timeout()
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport: socket.timeout
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport: 
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport: During handling of the above exception, another exception occurred:
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport: 
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport: Traceback (most recent call last):
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport:   File "C:\Users\adtran\AppData\Local\Programs\Python\Python37-32\lib\site-packages\paramiko\transport.py", line 1966, in run
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport:     self._check_banner()
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport:   File "C:\Users\adtran\AppData\Local\Programs\Python\Python37-32\lib\site-packages\paramiko\transport.py", line 2143, in _check_banner
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport:     "Error reading SSH protocol banner" + str(e)
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport: paramiko.ssh_exception.SSHException: Error reading SSH protocol banner
+ERR [20190426-14:44:18.355] thr=1   paramiko.transport: 

@@ -1,2 +1,10 @@
 ip_address,host_name,os,conn_protocol,user,password
+10.49.20.156,kali,linux,ssh,root,adtran
+10.49.20.152,'localhost.localdomain',linux,ssh,root,adtran1234
 10.49.61.125,424RG,linux,ssh,admin,adtran9638000
+10.49.61.126,424XRG,linux,ssh,admin,adtran9638000
+10.49.61.127,414RG,linux,ssh,admin,adtran9638000
+10.49.61.128,434RG,linux,ssh,admin,adtran9638000
+10.49.61.139,434RG,linux,ssh,admin,adtran9638000
+10.49.8.18,ontwin,windows,rdp,,
+172.20.13.12,pasupathi,windows,rdp,,

@@ -151,6 +151,7 @@ def start_linux_remote_check():
 	Then it wait till all the threads to complete their tasks.
 	It will igonre the dummy threads which may exists.
 	'''
+	with open('Exception.log','w'): pass #just to clear the logs of previous run
 	for i in ip_list_linux:
 		threading.Thread(target=ssh_connect, args=(i,)).start()
 	for thread in threading.enumerate():
@@ -163,6 +164,7 @@ def start_linux_remote_check():
 				continue
 			else:
 				raise
+
 def get_remote_conn_status():
 	'''
 	this function does fetch remote status string from remote_conn_status and sort them as per ip_list 

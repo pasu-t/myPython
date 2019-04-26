@@ -19,7 +19,7 @@ ping_status = []
 ping_health = []
 ip_list_windows = []
 ip_list_linux = []
-remote_conn_status = []
+remote_conn_status_dict = []
 #path = 'C:\\Users\\Home\\Desktop\\pasi\\python_ref\\csv_operations\\hosts.csv'
 
 with open('hosts.csv', 'r') as hosts_file:
@@ -31,7 +31,6 @@ with open('hosts.csv', 'r') as hosts_file:
 			ip_list_windows.append(line['ip_address'])
 		else:
 			ip_list_linux.append(line['ip_address'])
-	# remote_conn_check = [' ' for _ in range(len(ip_list))] #temporarilty storing empty values,once remote check function is ready, we can remove this line
 	
 def ping_ip(ip_addr):
 	'''
@@ -51,8 +50,7 @@ def ping_ip(ip_addr):
 	else:
 		print('please check the given input')
 		exit()
-# for i in ip_list:
-# 	ping_ip(i)
+
 def start_ping():
 	'''
 	function starts the simultaneous ping to the ip address in the list by creating thread objects.
@@ -90,12 +88,13 @@ def windows_remote_check(ip_addr):
 	[out, error] = rdp_out.communicate()
 	rdp_status = out.decode()
 	if 'RDP is open' in rdp_status:
-		remote_conn_status.append({ip_addr : 'Success'})
+		remote_conn_status_dict.append({ip_addr : 'Success'})
 		#print(rdp_status)
 	else:
 		print('A remote connection attempt failed to ',ip_addr)
 		#print(error.decode())
-		remote_conn_status.append({ip_addr :'Fail'})
+		remote_conn_status_dict.append({ip_addr :'Fail'})
+
 def start_windows_remote_check():
 	'''
 	function starts the simultaneous rdp check to the ip address in the list by creating thread objects.
@@ -114,6 +113,7 @@ def start_windows_remote_check():
 				continue
 			else:
 				raise
+
 def ssh_connect(ssh_conn_list):
 	'''
 	ssh_conn_list is the list object contains ip,user,password elements [ipaddresss, user, password]
@@ -126,13 +126,13 @@ def ssh_connect(ssh_conn_list):
 	    paramiko.util.log_to_file("Exception.log")
 	    ssh.connect(ssh_conn_list[0],username=ssh_conn_list[1],password=ssh_conn_list[2])
 	    print("Connected to", ssh_conn_list[0])
-	    remote_conn_status.append({ssh_conn_list[0] : 'Success'})
+	    remote_conn_status_dict.append({ssh_conn_list[0] : 'Success'})
 	except paramiko.AuthenticationException:
 	    print("Failed to connect to" , ssh_conn_list[0] , "due to wrong username/password")
-	    remote_conn_status.append({ssh_conn_list[0] : 'Fail'})
+	    remote_conn_status_dict.append({ssh_conn_list[0] : 'Fail'})
 	except Exception as e:
 	    #print(e)
-	    remote_conn_status.append({ssh_conn_list[0] : 'Fail'}) 
+	    remote_conn_status_dict.append({ssh_conn_list[0] : 'Fail'}) 
 	finally:
 		if ssh: 
 			ssh.close()
@@ -156,20 +156,19 @@ def start_linux_remote_check():
 			else:
 				raise
 
-
 def create_csv():
 	'''
 	this function creates a csv file with ip_list, hostname , ping health and remote connectivity when called
 	'''
 	print('started creating csv file for host status !!!')
 	with open('hosts_status.csv', 'w') as new_file:
-		fieldnames = ['ip_address', 'host_name', 'ping_health', 'remote_conn_check']
-		output_lines = tuple(map(lambda a,b,c,d: [a,b,c,d],ip_list, hosts_name, ping_health, remote_conn_check))
+		fieldnames = ['ip_address', 'host_name', 'ping_health', 'remote_conn_status']
+		output_lines = tuple(map(lambda a,b,c,d: [a,b,c,d],ip_list, hosts_name, ping_health, remote_conn_status_dict))
 		csv_writer = csv.writer(new_file)
 		csv_writer.writerow(fieldnames)
 		for line in output_lines:
 			csv_writer.writerow(line)
-			# print(line)
+
 def send_email(list_files,list_contacts):
 	'''
 	This method will send the mail to list_contacts with attachments of list_files

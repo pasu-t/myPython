@@ -139,7 +139,7 @@ class Host_status():
 
 	def ssh_connect(self,ssh_params):
 		'''
-		ssh_conn_list is the list object contains ip,user,password elements [ipaddresss, user, password]
+		ssh_params is the list object contains ip,user,password elements [ipaddresss, user, password]
 		Tries ssh remote connection and appends the status(element format --> {ip:status}) to remote_conn_status list variable
 		'''
 		try:

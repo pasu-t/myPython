@@ -10,6 +10,7 @@ import smtplib
 from email.message import EmailMessage
 
 class Host_status():
+	
 	def __init__(self):
 		self.list_contacts = ['pasupathi.thumburu@gmail.com', 'pasupathi.thumbur@adtran.com']
 		self.list_files = ['hosts_status.csv']
@@ -34,6 +35,7 @@ class Host_status():
 						self.ip_list_linux.append([line['ip_address'],line['user'],line['password']])
 		except FileNotFoundError:
 			print('Input hosts.csv file is not found.Please check.')
+			exit()
 
 		self.start_ping()
 		self.check_ping_health()
@@ -86,14 +88,14 @@ class Host_status():
 		this function gives the percentage of successful pings
 		rearranges in a order and then applies the formula to calculate health
 		'''
-		ping_status2 = []
+		self.final_ping_status = []
 		for i in self.ip_list:
 			for j in self.ping_status:
 				try :
-					ping_status2.append(j[i])
+					self.final_ping_status.append(j[i])
 				except KeyError:
 					pass
-		for each in ping_status2:
+		for each in self.final_ping_status:
 			self.ping_health.append(int((each[0]/4)*100))
 
 	def windows_remote_check(self,ip_addr):
@@ -108,14 +110,12 @@ class Host_status():
 			[out, error] = rdp_out.communicate()
 			rdp_status = out.decode()
 		except:
-			print('Unable to run powershell script for checking rdp connections')
+			print('Unable to run powershell script of checking rdp connections')
 
 		if 'RDP is open' in rdp_status:
 			self.remote_conn_status.append({ip_addr : 'Success'})
-			#print(rdp_status)
 		else:
-			print('A remote connection attempt failed to ',ip_addr)
-			#print(error.decode())
+			#print('A remote connection attempt failed to ',ip_addr)
 			self.remote_conn_status.append({ip_addr :'Fail'})
 
 	def start_windows_remote_check(self):
@@ -151,7 +151,7 @@ class Host_status():
 		    #print("Connected to", ssh_conn_list[0])
 		    self.remote_conn_status.append({ssh_params[0] : 'Success'})
 		except paramiko.AuthenticationException:
-		    #print("Failed to connect to" , ssh_conn_list[0] , "due to wrong username/password")
+		    print("Failed to connect to" , ssh_conn_list[0] , "due to wrong username/password")
 		    self.remote_conn_status.append({ssh_params[0] : 'Fail'})
 		except Exception as e:
 		    #print(e)
@@ -196,14 +196,18 @@ class Host_status():
 		'''
 		this function creates a csv file with ip_list, hostname , ping health and remote connectivity when called
 		'''
-		print('started creating csv file for host status !!!')
-		with open('hosts_status.csv', 'w') as new_file:
-			fieldnames = ['ip_address', 'host_name', 'ping_health', 'remote_conn_status']
-			output_lines = tuple(map(lambda a,b,c,d: [a,b,c,d],self.ip_list, self.hosts_name, self.ping_health, self.final_remote_conn_status))
-			csv_writer = csv.writer(new_file)
-			csv_writer.writerow(fieldnames)
-			for line in output_lines:
-				csv_writer.writerow(line)
+		try:
+			with open('hosts_status.csv', 'w') as new_file:
+				print('started creating csv file for host status !!!')
+				fieldnames = ['ip_address', 'host_name', 'ping_health', 'remote_conn_status']
+				output_lines = tuple(map(lambda a,b,c,d: [a,b,c,d],self.ip_list, self.hosts_name, self.ping_health, self.final_remote_conn_status))
+				csv_writer = csv.writer(new_file)
+				csv_writer.writerow(fieldnames)
+				for line in output_lines:
+					csv_writer.writerow(line)
+		except PermissionError:
+			print("Permission denied: 'hosts_status.csv'. Close the file if already opened")
+			exit()
 
 	def send_email(self,list_files,list_contacts):
 		'''

@@ -16,3 +16,7 @@ Class:
 ->Private properties and methods can be accessed through its public method
 ->Self is a special argument,it holds current object address
 
+Cunstructor:
+Destructor:
+-> del removes the variables but not the object, it decreases the reference count.
+

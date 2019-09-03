@@ -15,7 +15,6 @@ plt.bar(ages_x, dev_y, color = 'k', label='All Devs')
 plt.xlabel('Ages')
 plt.ylabel('Median Salary (USD)')
 plt.title('Median Salary (USD) by Age')
-# plt.legend(['All Devs', 'Python']) #if you don't pass label argument to plot method
 plt.legend()
 plt.grid(True)
 plt.tight_layout()

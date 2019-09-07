@@ -1,0 +1,1 @@
+manage.py --> file that allows us to run command line commands

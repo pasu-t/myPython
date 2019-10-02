@@ -29,6 +29,7 @@ static methods: dont pass anything automatically. Behaves like regular functions
 --> If you are not using cls or self variables anywhere then probably you want to check and see if that would be appropriate to use static methods.
 
 special/magic/dunder methods:
+
 -> __repr__, __str__ sepcial methods allow us to change how our objects are printed and displayed
 
 

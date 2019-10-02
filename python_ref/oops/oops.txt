@@ -20,3 +20,16 @@ Cunstructor:
 Destructor:
 -> del removes the variables but not the object, it decreases the reference count.
 
+instance variables: Contains data that is unique to each instance
+class variable: contains same data for each instance
+
+regular methods: automatically pass the instance as the first argument(self)
+class methods: automaticall pass the class as the first argument(cls)
+static methods: dont pass anything automatically. Behaves like regular functions except we include them 				in a class
+--> If you are not using cls or self variables anywhere then probably you want to check and see if that would be appropriate to use static methods.
+
+special/magic/dunder methods:
+-> __repr__, __str__ sepcial methods allow us to change how our objects are printed and displayed
+
+
+

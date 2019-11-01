@@ -1,0 +1,1 @@
+Scatter plots are useful when you want to show the relationship between two sets of values and see if they are correlated.

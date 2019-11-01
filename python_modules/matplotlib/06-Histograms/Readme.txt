@@ -1,0 +1,2 @@
+Histograms are useful when visualizing the distributuon of data where data falls within certain boundaries. 
+Its lot like a bargraph but a histogram groups the data up into bins instead of each plotting individual values.

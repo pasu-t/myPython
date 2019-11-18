@@ -2,25 +2,24 @@ from flask import render_template, url_for, flash, redirect
 from flask_paginate import Pagination, get_page_args
 from adtran_turk import app
 
-tasks = [
+tasks_list = [
 
-{'requester' : 'pasupathi',
-'task_summary' : 'Need python parser for the defenscics results',
-'task_id' : 'AD-00000',
-'reward_points' : 10,
-'date_created' : 'Oct 20, 2019',},
+{'Requester' : 'pasupathi',
+'Task Summary' : 'Need python parser for the defenscics results Need python parser for the defenscics results Need python parser for the defenscics results',
+'Reward_Points' : 10,
+'status' : 'pending',
+'Task_Id' : 'AD-00000',},
 
-{'author' : 'thumbur',
-'task_summary' : 'Optimize 4xx ONT framework',
-'task_id' : 'AD-00001',
-'reward_points' : 20,
-'date_created' : 'Oct 21, 2019',}
+{'Requester' : 'thumbur',
+'Task Summary' : 'Optimize 4xx ONT framework',
+'Reward_Points' : 20,
+'status' : 'in progress',
+'Task_Id' : 'AD-00001',}
 ]
 
-
 @app.route("/")
-def main():
-	return render_template('main.html')
+def home():
+	return render_template('home.html', tasks_list=tasks_list)
 
 @app.route("/about")
 def about():

@@ -14,22 +14,70 @@
     <title>Adtran Turk</title>
   {% endif %}
 </head>
-<body>
-  <main role="main", class=''>
-      <div class="row">
-        <div class="col-md-8">
-          {% with messages = get_flashed_messages(with_categories='true') %}
-            {% if messages %}
-              {% for category,message in messages %}
-                <div class="alert alert-{{ category }}">
-                  {{ message }}
-                </div>
-              {% endfor %}
-            {% endif %}
-          {% endwith %}
 
-          {% block content %}{% endblock %}
-    </main>
+<body>
+  {% block container %}
+  <div class="container">
+    <h2>Adtran Turk Tasks</h2>
+    <div class="card-deck">
+      <div class="card bg-secondary">
+        <div class="card-body text-center">
+          <p class="card-text">Total number of open issues in pending</p>
+          <a href="http://www.jira.adtran.com/" target= "_blank" class="btn btn-sm btn-light" role="button">1000</a>
+        </div>
+      </div>
+      <div class="card bg-secondary">
+        <div class="card-body text-center">
+          <p class="card-text" >Total number of ATTs in pending</p>
+          <a href="http://www.jira.adtran.com/" target= "_blank" class="btn btn-sm btn-light" role="button">100</a>
+        </div>
+      </div>
+      <div class="card bg-secondary">
+        <div class="card-body text-center">
+          <p class="card-text">Total number of ATTs in progress</p>
+          <a href="http://www.jira.adtran.com/" target= "_blank" class="btn btn-sm btn-light" role="button">10</a>
+        </div>
+      </div>
+      <div class="card bg-secondary">
+        <div class="card-body text-center">
+          <img class="card-img-top" src="helping-hands.jpg" alt="Card image cap">
+          <a href="{{ url_for('about') }}" target= "_blank" class="btn btn-sm btn-light" role="button">cick here for more info</a>
+        </div>
+      </div>
+    </div>
+
+      <h4>ATT table</h4>
+      <table style="margin-top:10px;" class="table table- table-striped table-bordered">
+        {% if tasks_list %}
+        <tr style="background-color: #808000">
+          {% for column in tasks_list[0] %}
+            {% if column != 'Task_Id' %}
+              <th>{{ column }}</th>
+            {% else %}
+              <th>Actions</th>
+            {% endif %}
+          {% endfor %}
+        </tr>
+        {% endif %}
+
+        {% for dict_item in tasks_list %}
+        <tr>
+           {% for key, value in dict_item.items() %}
+            {% if key != 'Task_Id' %}
+              <td> {{ value }} </td>
+            {% else %}
+              <td>
+                <a style="display: inline;" href="http://www.jira.adtran.com/{{ value }}" target= "_blank" class="btn btn-link btn-sm" role="button">View&Accept</a>
+              </td>
+            {% endif %}
+           {% endfor %}
+        </tr>
+        {% endfor %}
+       </table>
+    </div>
+  </div>
+  {% endblock %}
+
   <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

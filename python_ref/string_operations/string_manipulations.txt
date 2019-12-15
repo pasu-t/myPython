@@ -1,3 +1,0 @@
-[]  -->indexing
-[:] -->slicing
-[start:stop:step]

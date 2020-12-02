@@ -1,0 +1,10 @@
+2020-12-01 20:12:59,218: ERROR __main__ - Tried division by zero
+Traceback (most recent call last):
+  File "C:\Workspace\myPython\python_modules\logging\mathematics.py", line 30, in divide
+    result = x/y
+ZeroDivisionError: division by zero
+2020-12-01 20:19:35,798: ERROR __main__ - Tried division by zero
+Traceback (most recent call last):
+  File "C:\Workspace\myPython\python_modules\logging\mathematics.py", line 30, in divide
+    result = x/y
+ZeroDivisionError: division by zero

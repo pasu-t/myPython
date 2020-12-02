@@ -1,0 +1,5 @@
+2020-12-01 13:35:35,551 INFO - Our first message
+2020-12-01 13:35:35,551 DEBUG - Our debug message
+2020-12-01 13:35:35,551 WARNING - Our warning message
+2020-12-01 13:35:35,551 ERROR - Our error message
+2020-12-01 13:35:35,551 CRITICAL - Our critical message

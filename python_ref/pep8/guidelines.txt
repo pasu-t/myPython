@@ -1,0 +1,3 @@
+->classes starts with capitalized letter
+->methods starts with lower case letter
+->constants in all CAPS

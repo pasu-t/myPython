@@ -1,2 +1,2 @@
 # jira-robot
-This Repository will handle creating issue automatically in Jira tool for SS&amp;E Res Products
+This Repository will handle creating issue automatically in Jira tool

@@ -1,0 +1,2 @@
+INFO:root:Running <function add at 0x000001FFABCAECA0> with arguments:(2, 8)
+INFO:root:Running <function sub at 0x000001FFABCAED30> with arguments:(10, 5)

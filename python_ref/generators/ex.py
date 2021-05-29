@@ -7,7 +7,7 @@ majors = ['Math', 'Eng', 'CmpSci', 'Arts', 'Business']
 
 # print(help(memory_usage))
 
-print('Memory Before: {}Mb'.format(memory_usage()))
+print('Memory Before: {} Mb'.format(memory_usage()[0]))
 
 def people_list(num_people):
 	result = []
@@ -37,7 +37,7 @@ t2 = time.perf_counter()
 # people = people_generator(1000000)
 # t2 = time.perf_counter()
 
-print('Memory After: {}Mb'.format(memory_usage()))
+print('Memory After: {} Mb'.format(memory_usage()[0]))
 print('Took {} seconds'.format(t2-t1))
 
 

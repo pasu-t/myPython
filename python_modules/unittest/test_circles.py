@@ -2,7 +2,7 @@ import unittest
 from circles import circle_area
 from math import pi
 
-class  TestCircleArea(unittest.TestCase):
+class TestCircleArea(unittest.TestCase):
     """docstring for  TestCircleArea"""
     def test_area(self):
         #when radius > 0

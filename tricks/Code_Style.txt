@@ -1,0 +1,2 @@
+pip install pycodestyle  
+pycodestyle --show-source --show-pep8 --ignore=E501 --exclude=data .

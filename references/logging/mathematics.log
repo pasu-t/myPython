@@ -8,3 +8,8 @@ Traceback (most recent call last):
   File "C:\Workspace\myPython\python_modules\logging\mathematics.py", line 30, in divide
     result = x/y
 ZeroDivisionError: division by zero
+2025-05-25 17:27:22,904: ERROR __main__ - Tried division by zero
+Traceback (most recent call last):
+  File "/Users/pasupathithumbur/Desktop/myspace/myPython/python_modules/logging/mathematics.py", line 30, in divide
+    result = x/y
+ZeroDivisionError: division by zero
